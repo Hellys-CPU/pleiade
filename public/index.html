@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plêiade · holding da hellys. e da INNOVAR</title>
+<meta name="description" content="A Plêiade é a holding da hellys., de tecnologia, e da INNOVAR, de arte com tecnologia. Empresas diferentes, o mesmo céu.">
+<meta name="theme-color" content="#040c1e">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="marca/pleiade-favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Plêiade">
+<meta property="og:url" content="https://hellys-cpu.github.io/pleiade/">
+<meta property="og:title" content="Plêiade · empresas diferentes, o mesmo céu">
+<meta property="og:description" content="A holding da hellys., de tecnologia, e da INNOVAR, de arte com tecnologia. Acenda o céu e conheça o grupo.">
+<meta property="og:image" content="https://hellys-cpu.github.io/pleiade/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="As sete estrelas da Plêiade ligadas por fios, sobre o céu noturno.">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<script>document.documentElement.classList.add("js");</script>
+<script src="site.js" defer></script>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo" data-logo="oculto">
+  <div class="topo-dentro">
+    <a class="topo-marca" href="#inicio" aria-label="Plêiade, voltar ao céu">
+      <img src="marca/pleiade-horizontal-negativo.svg" alt="" width="108" height="28">
+    </a>
+    <nav class="topo-nav" aria-label="Seções">
+      <a href="#empresas">Empresas</a>
+      <a href="#tavola">A távola</a>
+      <a href="#jogo">Ligue os pontos</a>
+      <a href="#rotas" class="topo-rotas">Rotas</a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ============ O céu ============ -->
+  <section class="ceu" id="inicio" aria-labelledby="ceu-titulo">
+    <canvas class="ceu-canvas" aria-hidden="true"></canvas>
+
+    <div class="dentro ceu-dentro">
+      <div class="ceu-texto">
+        <p class="coord">Carta celeste · AR 03h 47m · Dec +24° 07′</p>
+        <h1 id="ceu-titulo">Empresas diferentes. O mesmo céu.</h1>
+        <p class="ceu-lead">A Plêiade é a holding da hellys. e da INNOVAR, e das próximas que vierem. Cada empresa brilha do seu jeito, e todas sentam na mesma mesa.</p>
+
+        <div class="painel-ceu">
+          <ol class="contagem" aria-hidden="true">
+            <li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+          </ol>
+          <p class="contagem-texto"><span data-acesas>0</span> de 7 estrelas acesas</p>
+          <button class="btn-estrela" type="button" data-acender>Acender o céu</button>
+        </div>
+        <p class="ceu-dica" data-dica>Passe o cursor pelo céu, ou role a página.</p>
+      </div>
+
+      <figure class="aglomerado">
+        <svg class="aglomerado-svg" viewBox="-14 -9 142 76" role="img" aria-labelledby="aglomerado-desc">
+          <desc id="aglomerado-desc">O símbolo da Plêiade: as sete estrelas do aglomerado nas posições reais do céu, ligadas por fios. A maior, em azul, é Alcyone.</desc>
+          <defs>
+            <radialGradient id="luz-gelo">
+              <stop offset="0" stop-color="#f3f6fb" stop-opacity=".55"/>
+              <stop offset=".35" stop-color="#cfe2ff" stop-opacity=".16"/>
+              <stop offset="1" stop-color="#8fc1ff" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="luz-estelar">
+              <stop offset="0" stop-color="#8fc1ff" stop-opacity=".7"/>
+              <stop offset=".4" stop-color="#5a95e0" stop-opacity=".2"/>
+              <stop offset="1" stop-color="#2563c9" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <g class="fios">
+            <line class="fio" data-de="0" data-para="1" pathLength="1" x1="6" y1="46.75" x2="41.49" y2="42.1"/>
+            <line class="fio" data-de="1" data-para="2" pathLength="1" x1="41.49" y1="42.1" x2="66.14" y2="56.05"/>
+            <line class="fio" data-de="2" data-para="5" pathLength="1" x1="66.14" y1="56.05" x2="96.52" y2="40.55"/>
+            <line class="fio" data-de="5" data-para="6" pathLength="1" x1="96.52" y1="40.55" x2="97.45" y2="25.05"/>
+            <line class="fio" data-de="6" data-para="4" pathLength="1" x1="97.45" y1="25.05" x2="90.48" y2="8"/>
+            <line class="fio" data-de="4" data-para="3" pathLength="1" x1="90.48" y1="8" x2="77.14" y2="17.3"/>
+            <line class="fio" data-de="3" data-para="1" pathLength="1" x1="77.14" y1="17.3" x2="41.49" y2="42.1"/>
+          </g>
+
+          <g class="estrelas">
+            <g class="estrela" data-i="0">
+              <circle class="luz" cx="6" cy="46.75" r="13" fill="url(#luz-gelo)"/>
+              <circle class="corpo" cx="6" cy="46.75" r="5"/>
+              <text class="nome" x="6" y="57.6" text-anchor="middle">Atlas</text>
+            </g>
+            <g class="estrela estrela--alcyone" data-i="1">
+              <circle class="luz" cx="41.49" cy="42.1" r="22" fill="url(#luz-estelar)"/>
+              <circle class="halo" cx="41.49" cy="42.1" r="7.6"/>
+              <circle class="corpo" cx="41.49" cy="42.1" r="7.6"/>
+              <text class="nome" x="41.49" y="55.4" text-anchor="middle">Alcyone</text>
+            </g>
+            <g class="estrela" data-i="2">
+              <circle class="luz" cx="66.14" cy="56.05" r="12" fill="url(#luz-gelo)"/>
+              <circle class="corpo" cx="66.14" cy="56.05" r="4.6"/>
+              <text class="nome" x="66.14" y="66.2" text-anchor="middle">Merope</text>
+            </g>
+            <g class="estrela" data-i="3">
+              <circle class="luz" cx="77.14" cy="17.3" r="12" fill="url(#luz-gelo)"/>
+              <circle class="corpo" cx="77.14" cy="17.3" r="4.6"/>
+              <text class="nome" x="70.6" y="18.4" text-anchor="end">Maia</text>
+            </g>
+            <g class="estrela" data-i="4">
+              <circle class="luz" cx="90.48" cy="8" r="11" fill="url(#luz-gelo)"/>
+              <circle class="corpo" cx="90.48" cy="8" r="4.2"/>
+              <text class="nome" x="96.6" y="5.2" text-anchor="start">Taygeta</text>
+            </g>
+            <g class="estrela" data-i="5">
+              <circle class="luz" cx="96.52" cy="40.55" r="13" fill="url(#luz-gelo)"/>
+              <circle class="corpo" cx="96.52" cy="40.55" r="5"/>
+              <text class="nome" x="103.6" y="45.6" text-anchor="start">Electra</text>
+            </g>
+            <g class="estrela" data-i="6">
+              <circle class="luz" cx="97.45" cy="25.05" r="10" fill="url(#luz-gelo)"/>
+              <circle class="corpo" cx="97.45" cy="25.05" r="3.4"/>
+              <text class="nome" x="103.6" y="26.2" text-anchor="start">Celaeno</text>
+            </g>
+          </g>
+        </svg>
+
+        <svg class="nome-marca" viewBox="128 4 212 48" role="img" aria-label="Plêiade">
+          <path class="letra" d="M133.34285714285716 19.0V49.0H138.4V37.64285714285714H142.3857142857143Q145.68571428571428 37.64285714285714 148.0857142857143 36.50714285714285Q150.4857142857143 35.371428571428574 151.8357142857143 33.27142857142857Q153.18571428571428 31.17142857142857 153.18571428571428 28.299999999999997Q153.18571428571428 25.428571428571427 151.8357142857143 23.35Q150.4857142857143 21.271428571428572 148.0857142857143 20.135714285714286Q145.68571428571428 19.0 142.3857142857143 19.0ZM138.4 33.18571428571428V23.457142857142856H142.3857142857143Q145.0 23.457142857142856 146.5857142857143 24.678571428571427Q148.17142857142858 25.9 148.17142857142858 28.299999999999997Q148.17142857142858 30.7 146.5857142857143 31.942857142857143Q145.0 33.18571428571428 142.3857142857143 33.18571428571428Z"/>
+          <path class="letra" d="M164.9714285714286 19.0V49.0H181.94285714285715V44.457142857142856H170.02857142857144V19.0Z"/>
+          <path class="letra" d="M192.44285714285715 19.0V49.0H210.7V44.542857142857144H197.4142857142857V35.114285714285714H209.84285714285713V30.742857142857144H197.4142857142857V23.457142857142856H210.7V19.0ZM201.87142857142857 11.971428571428568 206.28571428571428 15.871428571428574 209.37142857142857 13.642857142857146 201.87142857142857 7.642857142857146 194.37142857142857 13.642857142857146 197.5 15.871428571428574Z"/>
+          <path class="letra" d="M223.7714285714286 19.0V49.0H228.91428571428574V19.0Z"/>
+          <path class="letra" d="M239.20 49.00 L252.86 17.33 L254.90 17.33 L268.56 49.00 L262.89 49.00 L253.88 29.56 L244.87 49.00 Z"/>
+          <path class="letra" d="M278.84285714285716 19.0V49.0H288.5285714285714Q293.1142857142857 49.0 296.5857142857143 47.135714285714286Q300.0571428571429 45.27142857142857 302.00714285714287 41.90714285714286Q303.95714285714286 38.542857142857144 303.95714285714286 34.0Q303.95714285714286 29.457142857142856 302.00714285714287 26.09285714285714Q300.0571428571429 22.728571428571428 296.5857142857143 20.864285714285714Q293.1142857142857 19.0 288.5285714285714 19.0ZM284.0285714285714 44.24285714285714V23.757142857142856H288.4Q290.62857142857143 23.757142857142856 292.51428571428573 24.4Q294.4 25.04285714285714 295.79285714285714 26.32857142857143Q297.1857142857143 27.614285714285714 297.97857142857146 29.542857142857144Q298.7714285714286 31.47142857142857 298.7714285714286 34.0Q298.7714285714286 36.528571428571425 297.97857142857146 38.457142857142856Q297.1857142857143 40.385714285714286 295.79285714285714 41.65Q294.4 42.91428571428571 292.51428571428573 43.57857142857142Q290.62857142857143 44.24285714285714 288.4 44.24285714285714Z"/>
+          <path class="letra" d="M315.74285714285713 19.0V49.0H334.0V44.542857142857144H320.71428571428567V35.114285714285714H333.1428571428571V30.742857142857144H320.71428571428567V23.457142857142856H334.0V19.0Z"/>
+          <circle class="estrela-lambda" cx="253.88" cy="40" r="3.7"/>
+        </svg>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ Empresas ============ -->
+  <section class="secao" id="empresas" aria-labelledby="empresas-titulo">
+    <div class="dentro">
+      <header class="cabeca revelar">
+        <p class="coord">Catálogo · 3 objetos</p>
+        <h2 id="empresas-titulo">Cada uma, um fenômeno.</h2>
+        <p class="cabeca-texto">Não são estrelas iguais em fila. Cada empresa do grupo é um fenômeno diferente do mesmo céu, com nome, cor e jeito próprios.</p>
+      </header>
+
+      <!-- hellys. -->
+      <article class="fenomeno fenomeno--hellys revelar" aria-labelledby="hellys-titulo">
+        <div class="fenomeno-visual">
+          <div class="satelite" data-satelite>
+            <p class="vh">Um enxame de pontinhos, os nanorrobôs da hellys., zumbe em volta da tripulação: a Atena, engenheira de bordo, esfera laranja, e a Aurora, comunicação de bordo, esfera verde. Ao montar, eles se organizam e formam um satélite: a Atena constrói o painel laranja, a Aurora o verde.</p>
+            <canvas class="satelite-canvas" aria-hidden="true"></canvas>
+            <button class="tripulante sat-atena" type="button" aria-label="Atena, engenheira de bordo">
+              <span class="aro-atena" aria-hidden="true"><svg viewBox="0 0 100 100"><circle class="aro-escala" cx="50" cy="50" r="46"/><circle class="aro-arcos" cx="50" cy="50" r="40"/><path class="aro-mira" d="M8 22V8h14M78 8h14v14M92 78v14H78M22 92H8V78"/><g class="aro-robos"><circle cx="50" cy="4" r="1.9"/><circle cx="89.8" cy="73" r="1.6"/><circle cx="10.2" cy="73" r="1.6"/></g></svg></span>
+              <span class="personagem personagem--atena"></span>
+              <span class="tripulante-nome" aria-hidden="true">Atena<small>engenheira de bordo</small></span>
+            </button>
+            <button class="tripulante sat-aurora" type="button" aria-label="Aurora, comunicação de bordo">
+              <span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="personagem personagem--aurora"></span>
+              <span class="tripulante-nome" aria-hidden="true">Aurora<small>comunicação de bordo</small></span>
+            </button>
+            <button class="btn-estrela btn-estrela--hellys satelite-botao" type="button" data-montar>Montar o satélite</button>
+          </div>
+        </div>
+        <div class="fenomeno-texto">
+          <p class="catalogo">PL-01 · Satélite artificial</p>
+          <h3 id="hellys-titulo" class="fenomeno-marca">
+            <img src="marca/hellys-logotipo-cor-fundo-escuro.svg" alt="hellys." width="117" height="36">
+          </h3>
+          <p class="fenomeno-lead">Tecnologia e desenvolvimento: aplicativos, SaaS, sites e sistemas para operação e logística. Já tem clientes e projetos entregues.</p>
+          <p>O único objeto feito por gente neste céu. Os nanorrobôs da hellys. chegam soltos e se organizam até montar o sistema. Foi assim que saíram este site e o sistema interno que a Plêiade usa para tocar o grupo.</p>
+
+          <p class="tripulacao-titulo">A tripulação</p>
+          <ul class="tripulacao">
+            <li class="tripulacao-item">
+              <span class="mini" aria-hidden="true"><span class="aro-atena" aria-hidden="true"><svg viewBox="0 0 100 100"><circle class="aro-escala" cx="50" cy="50" r="46"/><circle class="aro-arcos" cx="50" cy="50" r="40"/><path class="aro-mira" d="M8 22V8h14M78 8h14v14M92 78v14H78M22 92H8V78"/><g class="aro-robos"><circle cx="50" cy="4" r="1.9"/><circle cx="89.8" cy="73" r="1.6"/><circle cx="10.2" cy="73" r="1.6"/></g></svg></span><span class="personagem personagem--atena"></span></span>
+              <p><strong>Atena <span>· engenheira de bordo</span></strong> Direta e técnica. Comanda os nanorrobôs e põe o sistema de pé: projetos, código, laboratório.</p>
+            </li>
+            <li class="tripulacao-item">
+              <span class="mini" aria-hidden="true"><span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span><span class="personagem personagem--aurora"></span></span>
+              <p><strong>Aurora <span>· comunicação de bordo</span></strong> Calorosa e mais geral. É quem conversa com quem está aqui embaixo, por isso é a guia deste site e a voz da assistente de IA da Plêiade.</p>
+            </li>
+          </ul>
+          <ul class="fenomeno-links">
+            <li><a href="https://hellys.dev.br" target="_blank" rel="noopener">hellys.dev.br <span aria-hidden="true">↗</span><span class="vh"> (abre em nova aba)</span></a></li>
+            <li><a href="https://www.linkedin.com/company/hellysdev" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span><span class="vh"> (abre em nova aba)</span></a></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- INNOVAR -->
+      <article class="fenomeno fenomeno--innovar revelar" aria-labelledby="innovar-titulo">
+        <div class="fenomeno-visual">
+          <div class="supernova" data-supernova>
+            <canvas class="supernova-canvas" aria-hidden="true"></canvas>
+            <button class="btn-estrela btn-estrela--innovar supernova-botao" type="button" data-explodir>Explodir a supernova</button>
+          </div>
+        </div>
+        <div class="fenomeno-texto">
+          <p class="catalogo">PL-02 · Supernova</p>
+          <h3 id="innovar-titulo" class="fenomeno-marca fenomeno-marca--texto">INNOVAR</h3>
+          <p class="fenomeno-lead">Arte usando tecnologia. Uma supernova é a explosão que espalha os elementos de que nascem novas estrelas: arte nascendo de energia.</p>
+          <p>A INNOVAR já vende e está montando o portfólio.</p>
+          <ul class="fenomeno-links">
+            <li><a href="#rotas">Rota da arte <span aria-hidden="true">→</span></a></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- As próximas -->
+      <article class="fenomeno fenomeno--nebulosa revelar" aria-labelledby="proximas-titulo">
+        <div class="fenomeno-visual">
+          <div class="nebulosa" aria-hidden="true">
+            <div class="nebulosa-nuvem"></div>
+            <svg class="nebulosa-limite" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M14 30 L27 14 L52 10 L74 17 L88 34 L86 60 L76 82 L50 90 L26 84 L12 64 Z"/>
+            </svg>
+            <span class="nebulosa-aviso">Região não mapeada</span>
+            <span class="protoestrela" style="--x:30%;--y:36%;--d:0s"><b>PL-03</b></span>
+            <span class="protoestrela" style="--x:62%;--y:26%;--d:.8s"><b>PL-04</b></span>
+            <span class="protoestrela" style="--x:72%;--y:58%;--d:1.6s"><b>PL-05</b></span>
+            <span class="protoestrela" style="--x:44%;--y:70%;--d:2.4s"><b>PL-06</b></span>
+            <span class="protoestrela" style="--x:24%;--y:60%;--d:3.2s"><b>PL-07</b></span>
+          </div>
+        </div>
+        <div class="fenomeno-texto">
+          <p class="catalogo">PL-03 a PL-07 · Região não mapeada</p>
+          <h3 id="proximas-titulo" class="fenomeno-titulo">As próximas</h3>
+          <p class="fenomeno-lead">A Plêiade foi pensada para sete empresas, como as sete estrelas que se veem a olho nu. Hoje são duas: há cinco lugares vagos na távola.</p>
+          <p>Cada empresa nova entra do mesmo jeito, com marca própria e lugar na mesa. O site cresce junto, sem refazer nada.</p>
+          <ul class="fenomeno-links">
+            <li><a href="#rotas">Rota das parcerias <span aria-hidden="true">→</span></a></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ A távola ============ -->
+  <section class="secao secao--tavola" id="tavola" aria-labelledby="tavola-titulo">
+    <div class="dentro tavola-grade">
+      <div class="tavola-texto revelar">
+        <p class="coord">A távola</p>
+        <h2 id="tavola-titulo">Uma mesa redonda. Sete lugares.</h2>
+        <p class="cabeca-texto">A távola é a mesa dos sócios. Nela passam os números de cada empresa, as decisões do grupo e as indicações de uma empresa para a outra.</p>
+
+        <ol class="principios">
+          <li><h3>Cada uma com a sua marca.</h3><p>Nome, clientes, equipe e resultados próprios.</p></li>
+          <li><h3>Decisões na mesma mesa.</h3><p>O que afeta o grupo, os sócios decidem juntos.</p></li>
+          <li><h3>Uma indica a outra.</h3><p>O cliente da hellys. que precisa de arte chega à INNOVAR, e o contrário também.</p></li>
+        </ol>
+      </div>
+
+      <div class="tavola revelar">
+        <div class="mesa">
+          <svg class="mesa-desenho" viewBox="0 0 400 400" aria-hidden="true">
+            <circle class="mesa-borda" cx="200" cy="200" r="122"/>
+            <circle class="mesa-anel" cx="200" cy="200" r="104"/>
+            <g class="mesa-simbolo" transform="translate(142 142)">
+              <path class="mesa-fios" d="M12.00 72.75 L47.49 68.10 L72.14 82.05 L102.52 66.55 L103.45 51.05 L96.48 34.00 L83.14 43.30 L47.49 68.10"/>
+              <circle cx="12" cy="72.75" r="5"/>
+              <circle class="mesa-alcyone" cx="47.49" cy="68.1" r="7.6"/>
+              <circle cx="72.14" cy="82.05" r="4.6"/>
+              <circle cx="83.14" cy="43.3" r="4.6"/>
+              <circle cx="96.48" cy="34" r="4.2"/>
+              <circle cx="102.52" cy="66.55" r="5"/>
+              <circle cx="103.45" cy="51.05" r="3.4"/>
+            </g>
+          </svg>
+          <button class="lugar lugar--hellys" type="button" style="--x:50%;--y:9%" data-lugar="Lugar 1 · hellys. · tecnologia e desenvolvimento" aria-label="Lugar 1: hellys."><span></span></button>
+          <button class="lugar lugar--innovar" type="button" style="--x:82.05%;--y:24.44%" data-lugar="Lugar 2 · INNOVAR · arte usando tecnologia" aria-label="Lugar 2: INNOVAR"><span></span></button>
+          <button class="lugar lugar--vago" type="button" style="--x:89.97%;--y:59.12%" data-lugar="Lugar 3 · vago · a cadeira está guardada" aria-label="Lugar 3: vago"><span></span></button>
+          <button class="lugar lugar--vago" type="button" style="--x:67.79%;--y:86.94%" data-lugar="Lugar 4 · vago · ainda sem nome" aria-label="Lugar 4: vago"><span></span></button>
+          <button class="lugar lugar--vago" type="button" style="--x:32.21%;--y:86.94%" data-lugar="Lugar 5 · vago · região não mapeada" aria-label="Lugar 5: vago"><span></span></button>
+          <button class="lugar lugar--vago" type="button" style="--x:10.03%;--y:59.12%" data-lugar="Lugar 6 · vago · pode ser uma parceria" aria-label="Lugar 6: vago"><span></span></button>
+          <button class="lugar lugar--vago" type="button" style="--x:17.95%;--y:24.44%" data-lugar="Lugar 7 · vago · o último a olho nu" aria-label="Lugar 7: vago"><span></span></button>
+        </div>
+        <p class="mesa-legenda" aria-live="polite" data-legenda>2 lugares ocupados, 5 vagos. Toque num lugar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Ligue os pontos ============ -->
+  <section class="secao" id="jogo" aria-labelledby="jogo-titulo">
+    <div class="dentro">
+      <header class="cabeca revelar">
+        <p class="coord">Intervalo</p>
+        <h2 id="jogo-titulo">Ligue os pontos?</h2>
+        <p class="cabeca-texto">Sete estrelas desta carta formam a Plêiade. As outras estão só de passagem. Toque numa estrela e depois na vizinha para ligar as duas.</p>
+      </header>
+
+      <div class="jogo revelar" data-jogo>
+        <div class="tabuleiro">
+          <svg class="tabuleiro-fios" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <g class="tabuleiro-dica"></g>
+            <g class="tabuleiro-ligados"></g>
+          </svg>
+          <div class="tabuleiro-estrelas"></div>
+        </div>
+        <div class="jogo-barra">
+          <p class="jogo-placar"><span data-ligacoes>0</span> de 7 ligações</p>
+          <p class="jogo-msg" aria-live="polite" data-jogo-msg></p>
+          <div class="jogo-botoes">
+            <button class="btn-estrela" type="button" data-dica-jogo>Dica</button>
+            <button class="btn-estrela btn-estrela--apagada" type="button" data-recomecar>Recomeçar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Rotas ============ -->
+  <section class="secao secao--rotas" id="rotas" aria-labelledby="rotas-titulo">
+    <div class="dentro">
+      <header class="cabeca revelar">
+        <p class="coord">Navegação</p>
+        <h2 id="rotas-titulo">Escolha uma rota.</h2>
+        <p class="cabeca-texto">Diga para onde quer ir e a gente aponta o caminho.</p>
+      </header>
+
+      <ol class="rotas">
+        <li class="rota rota--hellys revelar">
+          <p class="rota-num">Rota 1</p>
+          <div class="rota-nome">
+            <h3>Tecnologia</h3>
+            <p class="rota-destino">Destino: <strong>hellys.</strong></p>
+          </div>
+          <p class="rota-desc">Sistemas, aplicativos, SaaS e sites. Do diagnóstico ao sistema em produção.</p>
+          <div class="rota-acoes">
+            <a class="rota-ir" href="https://hellys.dev.br" target="_blank" rel="noopener">Ir para hellys.dev.br <span aria-hidden="true">↗</span><span class="vh"> (abre em nova aba)</span></a>
+            <a class="rota-link" href="https://www.linkedin.com/company/hellysdev" target="_blank" rel="noopener">LinkedIn da hellys. <span aria-hidden="true">↗</span><span class="vh"> (abre em nova aba)</span></a>
+          </div>
+        </li>
+
+        <li class="rota rota--innovar revelar">
+          <p class="rota-num">Rota 2</p>
+          <div class="rota-nome">
+            <h3>Arte</h3>
+            <p class="rota-destino">Destino: <strong>INNOVAR</strong></p>
+          </div>
+          <p class="rota-desc">Arte usando tecnologia. O portfólio está a caminho; até lá, a Plêiade faz a ponte.</p>
+          <div class="rota-acoes">
+            <a class="rota-ir" href="mailto:guilherme.hellys1@gmail.com?subject=Arte%20com%20a%20INNOVAR">Escrever sobre arte <span aria-hidden="true">→</span></a>
+          </div>
+        </li>
+
+        <li class="rota rota--pleiade revelar">
+          <p class="rota-num">Rota 3</p>
+          <div class="rota-nome">
+            <h3>Parcerias</h3>
+            <p class="rota-destino">Destino: <strong>Plêiade</strong></p>
+          </div>
+          <p class="rota-desc">Uma parceria com o grupo, ou uma empresa que caberia num dos cinco lugares vagos.</p>
+          <div class="rota-acoes">
+            <a class="rota-ir" href="mailto:guilherme.hellys1@gmail.com?subject=Parceria%20com%20a%20Pl%C3%AAiade">Escrever para a Plêiade <span aria-hidden="true">→</span></a>
+            <button class="rota-link rota-copiar" type="button" data-copiar="guilherme.hellys1@gmail.com">Copiar e-mail</button>
+            <p class="rota-copiado" aria-live="polite" data-copiado></p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="dentro rodape-dentro">
+    <img src="marca/pleiade-horizontal-negativo.svg" alt="Plêiade" width="108" height="28">
+    <p>© 2026 Plêiade · holding da hellys. e da INNOVAR</p>
+    <p>Site feito pela <a href="https://hellys.dev.br" target="_blank" rel="noopener">hellys.<span class="vh"> (abre em nova aba)</span></a> · <a href="#inicio">Voltar ao céu ↑</a></p>
+  </div>
+</footer>
+
+<!-- Aurora, a guia -->
+<aside class="guia" aria-label="Aurora, a guia do site" data-guia hidden>
+  <button class="guia-avatar" type="button" aria-label="Ouvir a Aurora">
+    <span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="personagem personagem--aurora"></span>
+  </button>
+  <div class="guia-balao" data-balao>
+    <p class="guia-nome">Aurora</p>
+    <p class="guia-fala" aria-hidden="true" data-fala></p>
+    <button class="guia-fechar" type="button" aria-label="Dispensar a Aurora" data-fechar-guia>×</button>
+  </div>
+  <p class="vh" role="status" data-fala-leitor></p>
+</aside>
+</body>
+</html>
