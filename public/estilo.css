@@ -1780,6 +1780,297 @@ h2 {
   color: var(--h-nevoa);
 }
 
+/* ---------- Abertura: a cúpula do observatório ---------- */
+
+.intro {
+  display: none;
+}
+
+.com-intro .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: block;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 55% at 60% 40%, rgba(37, 99, 201, 0.16), transparent 70%),
+    #02060f;
+  transition: opacity 0.8s ease;
+  /* Rede de segurança: se o script falhar, a abertura some sozinha */
+  animation: intro-seguranca 0s linear 10s forwards;
+}
+
+@keyframes intro-seguranca {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+.intro.intro--fim {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro.intro--rapida {
+  transition-duration: 0.35s;
+}
+
+.intro-ceu {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* As duas portas da cúpula, com a assinatura gravada atravessando a fenda */
+.intro-cupula {
+  position: absolute;
+  inset: 0;
+}
+
+.intro-porta {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  overflow: hidden;
+  transition: transform 1.25s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.intro-porta::before {
+  /* As costelas da cúpula */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(156, 196, 255, 0.04) 0 1px, transparent 1px 72px);
+}
+
+.intro-porta--esq {
+  left: 0;
+  background: linear-gradient(90deg, #01040a, #061230);
+  box-shadow: inset -1px 0 0 rgba(156, 196, 255, 0.28);
+}
+
+.intro-porta--dir {
+  right: 0;
+  background: linear-gradient(270deg, #01040a, #061230);
+  box-shadow: inset 1px 0 0 rgba(156, 196, 255, 0.28);
+}
+
+.intro-marca {
+  position: absolute;
+  top: 50%;
+  width: min(640px, 80vw);
+  max-width: none;
+  height: auto;
+  translate: -50% -50%;
+  opacity: 0;
+  animation: intro-surgir 1.1s ease 0.25s forwards;
+}
+
+.intro-porta--esq .intro-marca {
+  left: 100%;
+}
+
+.intro-porta--dir .intro-marca {
+  left: 0;
+}
+
+@keyframes intro-surgir {
+  from { opacity: 0; filter: blur(8px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+/* A fenda de luz que acende antes de a cúpula abrir */
+.intro-cupula::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  translate: -50% 0;
+  background: linear-gradient(transparent, rgba(220, 235, 255, 0.95) 30%, rgba(220, 235, 255, 0.95) 70%, transparent);
+  box-shadow: 0 0 28px 8px rgba(143, 193, 255, 0.35);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.intro--fenda .intro-cupula::after {
+  opacity: 1;
+}
+
+.intro--aberta .intro-cupula::after {
+  opacity: 0;
+}
+
+.intro--aberta .intro-porta--esq {
+  transform: translateX(-101%);
+}
+
+.intro--aberta .intro-porta--dir {
+  transform: translateX(101%);
+}
+
+.intro-legenda {
+  position: absolute;
+  left: 50%;
+  bottom: 16%;
+  translate: -50% 0;
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+.intro-legenda::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: 12px;
+  background: var(--estelar);
+  box-shadow: 0 0 8px rgba(143, 193, 255, 0.7);
+  transform-origin: left;
+  animation: intro-carregar 1.5s ease-in-out forwards;
+}
+
+@keyframes intro-carregar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.intro--fenda .intro-legenda {
+  opacity: 0;
+}
+
+/* Telemetria da luneta */
+.intro-hud {
+  position: absolute;
+  left: clamp(20px, 4vw, 56px);
+  top: clamp(20px, 4vh, 44px);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.intro--hud .intro-hud {
+  opacity: 1;
+}
+
+.intro-hud-titulo {
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.intro-hud dl {
+  display: grid;
+  gap: 6px;
+  margin: 14px 0 0;
+}
+
+.intro-hud dl div {
+  display: grid;
+  grid-template-columns: 64px auto;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.intro-hud dt {
+  font-family: var(--font-display);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--line-strong);
+}
+
+.intro-hud dd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.intro-hud .intro-status {
+  color: var(--estelar);
+}
+
+/* A mira no centro; trava em Alcyone no fim */
+.intro-mira {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(120px, 18vw, 200px);
+  aspect-ratio: 1;
+  margin: calc(clamp(120px, 18vw, 200px) / -2) 0 0 calc(clamp(120px, 18vw, 200px) / -2);
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.intro--hud .intro-mira {
+  opacity: 1;
+}
+
+.intro-mira svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.intro-mira circle,
+.intro-mira path {
+  fill: none;
+  stroke: rgba(156, 196, 255, 0.45);
+  stroke-width: 0.8;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: stroke 0.4s ease;
+}
+
+.intro-mira .mira-escala {
+  stroke-dasharray: 0.6 3.5;
+  stroke-width: 2.4;
+  animation: girar 12s linear infinite;
+}
+
+.intro-mira .mira-centro {
+  fill: rgba(156, 196, 255, 0.7);
+  stroke: none;
+}
+
+.intro-mira.travada circle,
+.intro-mira.travada path {
+  stroke: var(--estelar);
+}
+
+.intro-pular {
+  position: absolute;
+  right: clamp(16px, 3vw, 40px);
+  bottom: clamp(16px, 3vh, 32px);
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.rodape-botao {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
 /* ---------- Telas menores ---------- */
 
 @media (max-width: 1080px) {

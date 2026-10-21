@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Plêiade · holding da hellys. e da INNOVAR</title>
-<meta name="description" content="A Plêiade é a holding da hellys., de tecnologia, e da INNOVAR, de arte com tecnologia. Empresas diferentes, o mesmo céu.">
+<title>Plêiade · marcas diferentes, o mesmo céu</title>
+<meta name="description" content="O grupo Plêiade reúne a hellys., de tecnologia, e a INNOVAR, de arte com tecnologia. Marcas diferentes, o mesmo céu.">
 <meta name="theme-color" content="#040c1e">
 <meta name="color-scheme" content="dark">
 <link rel="icon" href="marca/pleiade-favicon.svg" type="image/svg+xml">
@@ -13,9 +13,9 @@
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Plêiade">
 <meta property="og:url" content="https://hellys-cpu.github.io/pleiade/">
-<meta property="og:title" content="Plêiade · empresas diferentes, o mesmo céu">
-<meta property="og:description" content="A holding da hellys., de tecnologia, e da INNOVAR, de arte com tecnologia. Acenda o céu e conheça o grupo.">
-<meta property="og:image" content="https://hellys-cpu.github.io/pleiade/og.jpg">
+<meta property="og:title" content="Plêiade · marcas diferentes, o mesmo céu">
+<meta property="og:description" content="O grupo da hellys., de tecnologia, e da INNOVAR, de arte com tecnologia. Acenda o céu e conheça as marcas.">
+<meta property="og:image" content="https://hellys-cpu.github.io/pleiade/og.jpg?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="As sete estrelas da Plêiade ligadas por fios, sobre o céu noturno.">
@@ -25,11 +25,51 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap">
 <link rel="stylesheet" href="estilo.css">
-<script>document.documentElement.classList.add("js");</script>
+<script>
+  document.documentElement.classList.add("js");
+  // A abertura roda uma vez por visita, só no topo da página e para quem não pediu menos movimento
+  try {
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches && !sessionStorage.getItem("pleiade:intro") && !location.hash) {
+      document.documentElement.classList.add("com-intro");
+    }
+  } catch (e) {}
+</script>
 <script src="site.js" defer></script>
 </head>
 <body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- Abertura: o observatório abre a cúpula e aponta a luneta para M45, as Plêiades -->
+<div class="intro" data-intro>
+  <canvas class="intro-ceu" aria-hidden="true"></canvas>
+
+  <div class="intro-mira" aria-hidden="true">
+    <svg viewBox="0 0 100 100">
+      <circle class="mira-aro" cx="50" cy="50" r="46"/>
+      <circle class="mira-escala" cx="50" cy="50" r="39"/>
+      <path class="mira-cruz" d="M50 0v15M50 85v15M0 50h15M85 50h15"/>
+      <circle class="mira-centro" cx="50" cy="50" r="1.4"/>
+    </svg>
+  </div>
+
+  <div class="intro-hud" aria-hidden="true">
+    <p class="intro-hud-titulo">Observatório Plêiade</p>
+    <dl>
+      <div><dt>Alvo</dt><dd data-hud-alvo>—</dd></div>
+      <div><dt>AR</dt><dd data-hud-ar>00h 00m 00s</dd></div>
+      <div><dt>Dec</dt><dd data-hud-dec>+00° 00′ 00″</dd></div>
+      <div><dt>Status</dt><dd class="intro-status" data-hud-status>Abrindo a cúpula</dd></div>
+    </dl>
+  </div>
+
+  <div class="intro-cupula" aria-hidden="true">
+    <div class="intro-porta intro-porta--esq"><img class="intro-marca" src="marca/pleiade-horizontal-negativo.svg" alt=""></div>
+    <div class="intro-porta intro-porta--dir"><img class="intro-marca" src="marca/pleiade-horizontal-negativo.svg" alt=""></div>
+    <p class="intro-legenda">Abrindo a cúpula</p>
+  </div>
+
+  <button class="btn-estrela intro-pular" type="button" data-pular-intro>Pular introdução</button>
+</div>
 
 <header class="topo" data-logo="oculto">
   <div class="topo-dentro">
@@ -37,7 +77,7 @@
       <img src="marca/pleiade-horizontal-negativo.svg" alt="" width="108" height="28">
     </a>
     <nav class="topo-nav" aria-label="Seções">
-      <a href="#empresas">Empresas</a>
+      <a href="#marcas">Marcas</a>
       <a href="#tavola">A távola</a>
       <a href="#jogo">Ligue os pontos</a>
       <a href="#rotas" class="topo-rotas">Rotas</a>
@@ -54,8 +94,8 @@
     <div class="dentro ceu-dentro">
       <div class="ceu-texto">
         <p class="coord">Carta celeste · AR 03h 47m · Dec +24° 07′</p>
-        <h1 id="ceu-titulo">Empresas diferentes. O mesmo céu.</h1>
-        <p class="ceu-lead">A Plêiade é a holding da hellys. e da INNOVAR, e das próximas que vierem. Cada empresa brilha do seu jeito, e todas sentam na mesma mesa.</p>
+        <h1 id="ceu-titulo">Marcas diferentes. O mesmo céu.</h1>
+        <p class="ceu-lead">O grupo Plêiade reúne a hellys. e a INNOVAR, e as próximas que vierem. Cada marca brilha do seu jeito, e todas sentam na mesma mesa.</p>
 
         <div class="painel-ceu">
           <ol class="contagem" aria-hidden="true">
@@ -147,13 +187,13 @@
     </div>
   </section>
 
-  <!-- ============ Empresas ============ -->
-  <section class="secao" id="empresas" aria-labelledby="empresas-titulo">
+  <!-- ============ Marcas ============ -->
+  <section class="secao" id="marcas" aria-labelledby="marcas-titulo">
     <div class="dentro">
       <header class="cabeca revelar">
         <p class="coord">Catálogo · 3 objetos</p>
-        <h2 id="empresas-titulo">Cada uma, um fenômeno.</h2>
-        <p class="cabeca-texto">Não são estrelas iguais em fila. Cada empresa do grupo é um fenômeno diferente do mesmo céu, com nome, cor e jeito próprios.</p>
+        <h2 id="marcas-titulo">Cada uma, um fenômeno.</h2>
+        <p class="cabeca-texto">Não são estrelas iguais em fila. Cada marca do grupo é um fenômeno diferente do mesmo céu, com nome, cor e jeito próprios.</p>
       </header>
 
       <!-- hellys. -->
@@ -239,8 +279,8 @@
         <div class="fenomeno-texto">
           <p class="catalogo">PL-03 a PL-07 · Região não mapeada</p>
           <h3 id="proximas-titulo" class="fenomeno-titulo">As próximas</h3>
-          <p class="fenomeno-lead">A Plêiade foi pensada para sete empresas, como as sete estrelas que se veem a olho nu. Hoje são duas: há cinco lugares vagos na távola.</p>
-          <p>Cada empresa nova entra do mesmo jeito, com marca própria e lugar na mesa. O site cresce junto, sem refazer nada.</p>
+          <p class="fenomeno-lead">A Plêiade foi pensada para sete marcas, como as sete estrelas que se veem a olho nu. Hoje são duas: há cinco lugares vagos na távola.</p>
+          <p>Cada marca nova entra do mesmo jeito, com identidade própria e lugar na mesa. O site cresce junto, sem refazer nada.</p>
           <ul class="fenomeno-links">
             <li><a href="#rotas">Rota das parcerias <span aria-hidden="true">→</span></a></li>
           </ul>
@@ -255,10 +295,10 @@
       <div class="tavola-texto revelar">
         <p class="coord">A távola</p>
         <h2 id="tavola-titulo">Uma mesa redonda. Sete lugares.</h2>
-        <p class="cabeca-texto">A távola é a mesa dos sócios. Nela passam os números de cada empresa, as decisões do grupo e as indicações de uma empresa para a outra.</p>
+        <p class="cabeca-texto">A távola é a mesa dos sócios. Nela passam os números de cada marca, as decisões do grupo e as indicações de uma marca para a outra.</p>
 
         <ol class="principios">
-          <li><h3>Cada uma com a sua marca.</h3><p>Nome, clientes, equipe e resultados próprios.</p></li>
+          <li><h3>Cada uma com a sua cara.</h3><p>Nome, identidade, clientes e resultados próprios.</p></li>
           <li><h3>Decisões na mesma mesa.</h3><p>O que afeta o grupo, os sócios decidem juntos.</p></li>
           <li><h3>Uma indica a outra.</h3><p>O cliente da hellys. que precisa de arte chega à INNOVAR, e o contrário também.</p></li>
         </ol>
@@ -363,7 +403,7 @@
             <h3>Parcerias</h3>
             <p class="rota-destino">Destino: <strong>Plêiade</strong></p>
           </div>
-          <p class="rota-desc">Uma parceria com o grupo, ou uma empresa que caberia num dos cinco lugares vagos.</p>
+          <p class="rota-desc">Uma parceria com o grupo, ou uma marca que caberia num dos cinco lugares vagos.</p>
           <div class="rota-acoes">
             <a class="rota-ir" href="mailto:guilherme.hellys1@gmail.com?subject=Parceria%20com%20a%20Pl%C3%AAiade">Escrever para a Plêiade <span aria-hidden="true">→</span></a>
             <button class="rota-link rota-copiar" type="button" data-copiar="guilherme.hellys1@gmail.com">Copiar e-mail</button>
@@ -378,8 +418,8 @@
 <footer class="rodape">
   <div class="dentro rodape-dentro">
     <img src="marca/pleiade-horizontal-negativo.svg" alt="Plêiade" width="108" height="28">
-    <p>© 2026 Plêiade · holding da hellys. e da INNOVAR</p>
-    <p>Site feito pela <a href="https://hellys.dev.br" target="_blank" rel="noopener">hellys.<span class="vh"> (abre em nova aba)</span></a> · <a href="#inicio">Voltar ao céu ↑</a></p>
+    <p>© 2026 Grupo Plêiade · hellys. e INNOVAR</p>
+    <p>Site feito pela <a href="https://hellys.dev.br" target="_blank" rel="noopener">hellys.<span class="vh"> (abre em nova aba)</span></a> · <a href="#inicio">Voltar ao céu ↑</a> · <button class="rodape-botao" type="button" data-rever-intro>Rever a abertura</button></p>
   </div>
 </footer>
 

@@ -18,6 +18,15 @@
       try { sessionStorage.setItem(k, v); } catch { /* janela anônima: vale só nesta página */ }
     },
   };
+  /** A abertura roda antes de tudo; o resto do site espera ela terminar para começar a falar. */
+  const raiz = document.documentElement;
+  const comIntro = () => raiz.classList.contains("com-intro");
+  const veioDaIntro = comIntro();
+  const depoisDaIntro = (fn) => {
+    if (comIntro()) document.addEventListener("pleiade:intro-fim", fn, { once: true });
+    else fn();
+  };
+
   /** Cada parte roda isolada: se uma falhar, o resto do site continua de pé. */
   const parte = (fn) => {
     try { return fn(); } catch (erro) { console.error(erro); return undefined; }
@@ -94,6 +103,238 @@
 
     return { dizer };
   }) || { dizer() {} };
+
+  /* ---------- Abertura: a cúpula abre e a luneta aponta para M45 ---------- */
+  parte(() => {
+    if (!comIntro()) return;
+    // Quem chegou no meio da página não vê a abertura
+    if (window.scrollY > 40) {
+      raiz.classList.remove("com-intro");
+      return;
+    }
+    const el = $("[data-intro]");
+    const cv = $(".intro-ceu", el);
+    const ctx = cv.getContext("2d");
+    const mira = $(".intro-mira", el);
+    const hud = {
+      alvo: $("[data-hud-alvo]", el),
+      ar: $("[data-hud-ar]", el),
+      dec: $("[data-hud-dec]", el),
+      status: $("[data-hud-status]", el),
+    };
+    // Linha do tempo, em milissegundos
+    const T = { arranque: 2100, cruzeiro: 2600, freio: 3700, para: 4700, foco: 5350, sai: 6000 };
+    // A luneta corre para cima e para a direita; o céu escorre ao contrário
+    const U = { x: 0.86, y: -0.51 };
+    const relogios = [];
+    const em = (ms, fn) => relogios.push(setTimeout(fn, ms));
+    let W = 0;
+    let H = 0;
+    let vmax = 2;
+    let dFim = 1;
+    let campo = [];
+    let alvos = [];
+    let quadro = 0;
+    let acabou = false;
+    const t0 = performance.now();
+
+    function velocidade(t) {
+      if (t < T.arranque || t > T.para) return 0;
+      if (t < T.cruzeiro) return (vmax * (t - T.arranque)) / (T.cruzeiro - T.arranque);
+      if (t < T.freio) return vmax;
+      return vmax * (1 - (t - T.freio) / (T.para - T.freio)) ** 2;
+    }
+
+    // Quanto o céu já andou (a integral da velocidade)
+    function andou(t) {
+      if (t <= T.arranque) return 0;
+      const a = Math.min(t, T.cruzeiro) - T.arranque;
+      let d = (vmax * a * a) / (2 * (T.cruzeiro - T.arranque));
+      if (t <= T.cruzeiro) return d;
+      d += vmax * (Math.min(t, T.freio) - T.cruzeiro);
+      if (t <= T.freio) return d;
+      const L = T.para - T.freio;
+      const s = Math.min(1, (t - T.freio) / L);
+      return d + (vmax * L * (1 - (1 - s) ** 3)) / 3;
+    }
+
+    function montar() {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      cv.width = Math.round(W * dpr);
+      cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      vmax = (2.3 * Math.max(W, H)) / 1400;
+      dFim = andou(T.para);
+      const n = Math.min(800, Math.round((W * H) / 1700));
+      campo = [];
+      for (let i = 0; i < n; i++) {
+        const z = [0.35, 0.6, 1][Math.floor(Math.random() * 3)];
+        campo.push({ x: Math.random() * W, y: Math.random() * H, z, r: 0.4 + z * 0.9, a: (0.25 + z * 0.5) * (0.6 + Math.random() * 0.4) });
+      }
+      // As sete estrelas param exatamente onde ficam no céu do site
+      alvos = $$(".ceu .estrela .corpo").map((c) => {
+        const r = c.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2, r: Math.max(1.8, r.width / 2) };
+      });
+    }
+
+    const dois = (n) => String(Math.floor(n)).padStart(2, "0");
+    function telemetria(p) {
+      const ar = (3 * 3600 + 47 * 60 + 24) * p;
+      const dec = (24 * 3600 + 7 * 60) * p;
+      hud.ar.textContent = `${dois(ar / 3600)}h ${dois((ar % 3600) / 60)}m ${dois(ar % 60)}s`;
+      hud.dec.textContent = `+${dois(dec / 3600)}° ${dois((dec % 3600) / 60)}′ ${dois(dec % 60)}″`;
+    }
+
+    function desenhar(agora) {
+      quadro = 0;
+      if (acabou) return;
+      const t = agora - t0;
+      const D = andou(t);
+      const V = velocidade(t);
+      ctx.clearRect(0, 0, W, H);
+
+      // O céu escorrendo, com rastro quando a luneta corre
+      for (const s of campo) {
+        let x = (s.x - D * s.z * U.x) % W;
+        let y = (s.y - D * s.z * U.y) % H;
+        if (x < 0) x += W;
+        if (y < 0) y += H;
+        const rastro = V * s.z * 28;
+        if (rastro > 1.5) {
+          ctx.strokeStyle = `rgba(220,232,255,${s.a.toFixed(3)})`;
+          ctx.lineWidth = s.r;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + U.x * rastro, y + U.y * rastro);
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = `rgba(220,232,255,${s.a.toFixed(3)})`;
+          ctx.beginPath();
+          ctx.arc(x, y, s.r, 0, 6.2832);
+          ctx.fill();
+        }
+      }
+
+      // As Plêiades chegam com o céu, desfocadas, e entram em foco
+      if (t > T.arranque) {
+        const falta = dFim - D;
+        const foco = t < T.para ? 0 : Math.min(1, (t - T.para) / (T.foco - T.para));
+        const borrao = (1 - foco) ** 2;
+        alvos.forEach((a, i) => {
+          const x = a.x + falta * U.x;
+          const y = a.y + falta * U.y;
+          if (x < -80 || x > W + 80 || y < -80 || y > H + 80) return;
+          const raio = a.r * (1 + 3.2 * borrao) + 2;
+          const brilho = 0.95 - 0.55 * borrao;
+          const cor = i === 1 ? "143,193,255" : "243,246,251";
+          const g = ctx.createRadialGradient(x, y, 0, x, y, raio * 2.4);
+          g.addColorStop(0, `rgba(${cor},${brilho.toFixed(3)})`);
+          g.addColorStop(0.3, `rgba(${cor},${(brilho * 0.45).toFixed(3)})`);
+          g.addColorStop(1, `rgba(${cor},0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(x, y, raio * 2.4, 0, 6.2832);
+          ctx.fill();
+          const rastro = V * 28;
+          if (rastro > 1.5) {
+            ctx.strokeStyle = `rgba(${cor},0.5)`;
+            ctx.lineWidth = a.r;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + U.x * rastro, y + U.y * rastro);
+            ctx.stroke();
+          }
+        });
+      }
+
+      if (t > T.arranque && t < T.para + 100) telemetria(Math.min(1, D / dFim));
+      quadro = requestAnimationFrame(desenhar);
+    }
+
+    function travar() {
+      telemetria(1);
+      const alcyone = alvos[1];
+      if (!alcyone) return;
+      mira.style.transform = `translate(${(alcyone.x - W / 2).toFixed(1)}px, ${(alcyone.y - H / 2).toFixed(1)}px) scale(0.42)`;
+      mira.classList.add("travada");
+    }
+
+    // Pular: botão, Esc, ou simplesmente rolar a página (a rolagem nunca fica presa)
+    const teclasDePular = ["Escape", " ", "PageDown", "ArrowDown", "End"];
+    const porTecla = (e) => {
+      if (teclasDePular.includes(e.key)) sair(true);
+    };
+    const porRolagem = () => sair(true);
+
+    function removerEscutas() {
+      document.removeEventListener("keydown", porTecla);
+      window.removeEventListener("wheel", porRolagem);
+      window.removeEventListener("touchmove", porRolagem);
+    }
+
+    function fim() {
+      if (acabou) return;
+      acabou = true;
+      relogios.forEach(clearTimeout);
+      cancelAnimationFrame(quadro);
+      removerEscutas();
+      el.remove();
+      raiz.classList.remove("com-intro");
+      sessao.gravar("pleiade:intro", "vista");
+      document.dispatchEvent(new Event("pleiade:intro-fim"));
+    }
+
+    function sair(rapido) {
+      if (acabou || el.classList.contains("intro--fim")) return;
+      if (rapido) el.classList.add("intro--rapida");
+      el.classList.add("intro--fim");
+      relogios.push(setTimeout(fim, rapido ? 380 : 850));
+    }
+
+    document.addEventListener("keydown", porTecla);
+    window.addEventListener("wheel", porRolagem, { passive: true });
+    window.addEventListener("touchmove", porRolagem, { passive: true });
+    $("[data-pular-intro]", el).addEventListener("click", () => sair(true));
+
+    montar();
+    quadro = requestAnimationFrame(desenhar);
+    em(1350, () => el.classList.add("intro--fenda"));
+    em(1700, () => el.classList.add("intro--aberta"));
+    em(1950, () => {
+      el.classList.add("intro--hud");
+      hud.status.textContent = "Cúpula aberta";
+    });
+    em(T.arranque, () => {
+      hud.alvo.textContent = "M45 · Plêiades";
+      hud.status.textContent = "Apontando a luneta";
+    });
+    em(T.para, () => {
+      hud.status.textContent = "Focando";
+    });
+    em(T.foco, () => {
+      hud.status.textContent = "Alvo travado";
+      travar();
+    });
+    em(T.sai, () => sair(false));
+  });
+
+  /* ---------- Rever a abertura (rodapé) ---------- */
+  parte(() => {
+    $("[data-rever-intro]").addEventListener("click", () => {
+      try {
+        sessionStorage.removeItem("pleiade:intro");
+      } catch {
+        /* sem armazenamento: recarrega mesmo assim */
+      }
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+      history.replaceState(null, "", location.pathname);
+      location.reload();
+    });
+  });
 
   /* ---------- O céu da abertura ---------- */
   parte(() => {
@@ -333,23 +574,26 @@
       acenderTodas("memoria", 0);
       setTimeout(() => guia.dizer(calmo ? "Oi. O céu já está aceso para você." : "De volta? O céu continua aceso."), 1200);
     } else {
-      setTimeout(() => guia.dizer("Parece que alguém olhou pro céu…", { chave: "oi" }), 1200);
-      setTimeout(() => {
-        if (!acesas.size) {
-          guia.dizer(toque ? "Arrasta o dedo pelas estrelas fortes. Ou só rola." : "Passa o cursor pelas estrelas mais fortes. Ou só rola.", { chave: "dica" });
-        }
-      }, 7500);
-      // Quem só fica olhando também vê o céu acender, devagar
-      setTimeout(() => {
-        if (!acesas.size && !mexeu) acenderTodas("sozinho", 420);
-      }, 16000);
+      depoisDaIntro(() => {
+        const oi = veioDaIntro ? "Achamos as Plêiades. Agora acende você." : "Parece que alguém olhou pro céu…";
+        setTimeout(() => guia.dizer(oi, { chave: "oi" }), veioDaIntro ? 500 : 1200);
+        setTimeout(() => {
+          if (!acesas.size) {
+            guia.dizer(toque ? "Arrasta o dedo pelas estrelas fortes. Ou só rola." : "Passa o cursor pelas estrelas mais fortes. Ou só rola.", { chave: "dica" });
+          }
+        }, 7500);
+        // Quem só fica olhando também vê o céu acender, devagar
+        setTimeout(() => {
+          if (!acesas.size && !mexeu) acenderTodas("sozinho", 420);
+        }, 16000);
+      });
     }
   });
 
   /* ---------- Falas da Aurora pelo caminho ---------- */
   parte(() => {
     const falas = {
-      empresas: "Cada empresa aqui é um fenômeno. Spoiler: uma delas explode.",
+      marcas: "Cada marca aqui é um fenômeno. Spoiler: uma delas explode.",
       tavola: "Cinco lugares vagos. A gente guarda a cadeira.",
       jogo: "Intervalo. Bora ligar uns pontos?",
       rotas: "Escolha uma rota. Eu fico de olho daqui.",

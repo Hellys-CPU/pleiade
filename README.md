@@ -1,6 +1,6 @@
 # Plêiade · site
 
-Site institucional da Plêiade, a holding da **hellys.** e da **INNOVAR**. É uma carta celeste interativa: o visitante acende as sete estrelas do símbolo, conhece cada empresa como um fenômeno diferente do mesmo céu e escolhe uma rota de contato.
+Site do grupo Plêiade, que reúne as marcas **hellys.** e **INNOVAR**. É uma carta celeste interativa: o visitante acende as sete estrelas do símbolo, conhece cada marca como um fenômeno diferente do mesmo céu e escolhe uma rota de contato.
 
 No ar em **https://hellys-cpu.github.io/pleiade/**
 
