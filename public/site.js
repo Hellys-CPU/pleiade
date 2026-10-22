@@ -1,6 +1,6 @@
 /*
  * Plêiade · site institucional.
- * O céu que acende, a Aurora que guia, a supernova da INNOVAR, a távola e o jogo de ligar os pontos.
+ * O céu que acende, a Aurora que guia, a supernova da INNOVAR, o pulsar da Pulsar, a távola e o jogo de ligar os pontos.
  * Sem bibliotecas. Quem pede menos movimento recebe tudo parado e legível.
  */
 (() => {
@@ -594,7 +594,7 @@
   parte(() => {
     const falas = {
       marcas: "Cada marca aqui é um fenômeno. Spoiler: uma delas explode.",
-      tavola: "Cinco lugares vagos. A gente guarda a cadeira.",
+      tavola: "Quatro lugares vagos. A gente guarda a cadeira.",
       jogo: "Intervalo. Bora ligar uns pontos?",
       rotas: "Escolha uma rota. Eu fico de olho daqui.",
     };
@@ -1457,6 +1457,210 @@
     }
 
     caixa.addEventListener("click", explodir);
+
+    new IntersectionObserver(([e]) => {
+      visivel = e.isIntersecting;
+      if (visivel) ligar();
+    }).observe(caixa);
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) ligar();
+    });
+
+    let espera;
+    window.addEventListener("resize", () => {
+      clearTimeout(espera);
+      espera = setTimeout(montar, 150);
+    });
+    montar();
+  });
+
+  /* ---------- Pulsar: o farol que pisca a cada 1,337 s ---------- */
+  parte(() => {
+    const caixa = $("[data-pulsar]");
+    const cv = $("canvas", caixa);
+    const ctx = cv.getContext("2d");
+    const botao = $("[data-sintonizar]", caixa);
+    const PERIODO = 1337.3; // PSR B1919+21, o primeiro pulsar descoberto
+    const PONTOS = 120;
+    const LINHAS = 16;
+    const inicio = performance.now();
+    let W = 0;
+    let H = 0;
+    let escala = 1;
+    let sintonizado = false;
+    let registro = [];
+    let aneis = [];
+    let ultima = 0;
+    let quadro = 0;
+    let visivel = false;
+
+    // Uma passagem do feixe gravada no rádio: ruído, e um pico no meio quando está sintonizado
+    function novaLinha(sinal) {
+      const pts = new Float32Array(PONTOS + 1);
+      const meio = 0.5 + (Math.random() - 0.5) * 0.03;
+      const amp = sinal ? 0.4 + Math.random() * 0.6 : 0;
+      const larg = 0.025 + Math.random() * 0.015;
+      let ruido = 0;
+      for (let k = 0; k <= PONTOS; k++) {
+        const x = k / PONTOS;
+        const d = (x - meio) / larg;
+        const perto = sinal ? 0.3 + 0.7 * Math.exp(-(((x - meio) / 0.22) ** 2)) : 0.55;
+        ruido = ruido * 0.55 + (Math.random() - 0.5) * 0.1;
+        pts[k] = amp * Math.exp(-d * d) + ruido * perto;
+      }
+      return { pts, sinal };
+    }
+
+    function montar() {
+      const r = caixa.getBoundingClientRect();
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = r.width;
+      H = r.height;
+      escala = Math.min(W, H) / 400;
+      cv.width = Math.round(W * dpr);
+      cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      while (registro.length < LINHAS + 1) registro.unshift(novaLinha(false));
+      desenhar(performance.now());
+    }
+
+    function feixes(x, y, f) {
+      const ang = Math.PI * 0.62 + f * Math.PI * 2;
+      const comp = Math.max(W, H) * 0.75;
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      for (const a of [ang, ang + Math.PI]) {
+        const g = ctx.createRadialGradient(x, y, 0, x, y, comp);
+        g.addColorStop(0, "rgba(228,255,58,0.3)");
+        g.addColorStop(0.3, "rgba(228,255,58,0.07)");
+        g.addColorStop(1, "rgba(228,255,58,0)");
+        ctx.fillStyle = g;
+        for (const abre of [0.07, 0.012]) {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.arc(x, y, comp, a - abre, a + abre);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+
+    function gravacao(f) {
+      const n = registro.length;
+      const topo = H * 0.42;
+      const base = H * 0.8;
+      const passo = (base - topo) / (LINHAS - 1);
+      const entrou = calmo ? 1 : 1 - (1 - Math.min(1, f * 2.2)) ** 3;
+      const x0 = W * 0.16;
+      const larg = W * 0.68;
+      const alto = passo * 5;
+      const tracar = (pts, y) => {
+        ctx.beginPath();
+        for (let k = 0; k <= PONTOS; k++) {
+          const px = x0 + (k / PONTOS) * larg;
+          const py = y - pts[k] * alto;
+          if (k) ctx.lineTo(px, py);
+          else ctx.moveTo(px, py);
+        }
+      };
+      ctx.lineJoin = "round";
+      ctx.lineWidth = Math.max(1, 1.3 * escala);
+      for (let k = 0; k < n; k++) {
+        const { pts, sinal } = registro[k];
+        const y = base - (n - 1 - k) * passo + (1 - entrou) * passo;
+        let alfa = 0.14 + 0.86 * (k / (n - 1)) ** 1.3;
+        if (k === 0) alfa *= 1 - entrou;
+        if (k === n - 1) alfa *= entrou;
+        // Apaga o que ficou atrás da linha, para as de trás sumirem por baixo das da frente
+        tracar(pts, y);
+        ctx.lineTo(x0 + larg, y + passo);
+        ctx.lineTo(x0, y + passo);
+        ctx.closePath();
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.fillStyle = "#000";
+        ctx.fill();
+        ctx.globalCompositeOperation = "source-over";
+        const g = ctx.createLinearGradient(x0, 0, x0 + larg, 0);
+        const cor = sinal ? "228,255,58" : "156,196,255";
+        const forca = sinal ? 1 : 0.45;
+        g.addColorStop(0, `rgba(${cor},0)`);
+        g.addColorStop(0.15, `rgba(${cor},${(alfa * forca).toFixed(3)})`);
+        g.addColorStop(0.85, `rgba(${cor},${(alfa * forca).toFixed(3)})`);
+        g.addColorStop(1, `rgba(${cor},0)`);
+        ctx.strokeStyle = g;
+        tracar(pts, y);
+        ctx.stroke();
+      }
+    }
+
+    function desenhar(agora) {
+      ctx.clearRect(0, 0, W, H);
+      const f = calmo ? 0.25 : (((agora - inicio) % PERIODO) + PERIODO) % PERIODO / PERIODO;
+      const x = W * 0.5;
+      const y = H * 0.22;
+      const n = Math.floor((agora - inicio) / PERIODO);
+      if (!calmo && n > ultima) {
+        ultima = n;
+        registro.push(novaLinha(sintonizado));
+        registro.shift();
+        if (sintonizado) aneis.push({ t: agora });
+      }
+
+      // O registro vem primeiro: ele apaga o que fica atrás de cada linha, e o feixe passa por cima
+      gravacao(f);
+      feixes(x, y, f);
+
+      for (let k = aneis.length - 1; k >= 0; k--) {
+        const p = (agora - aneis[k].t) / 1600;
+        if (p >= 1) { aneis.splice(k, 1); continue; }
+        ctx.strokeStyle = `rgba(228,255,58,${((1 - p) * 0.5).toFixed(3)})`;
+        ctx.lineWidth = 2 * (1 - p) + 0.4;
+        ctx.beginPath();
+        ctx.arc(x, y, 6 * escala + (1 - (1 - p) ** 3) * Math.min(W, H) * 0.45, 0, 6.2832);
+        ctx.stroke();
+      }
+
+      const brilho = calmo ? 0.4 : Math.exp(-f * 9);
+      const r = (5 + brilho * 4) * Math.max(0.7, escala);
+      const halo = ctx.createRadialGradient(x, y, 0, x, y, r * 12);
+      halo.addColorStop(0, `rgba(228,255,58,${(0.35 + brilho * 0.4).toFixed(3)})`);
+      halo.addColorStop(0.3, `rgba(228,255,58,${(0.08 + brilho * 0.1).toFixed(3)})`);
+      halo.addColorStop(1, "rgba(228,255,58,0)");
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(x, y, r * 12, 0, 6.2832);
+      ctx.fill();
+      ctx.fillStyle = "#fbffe2";
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, 6.2832);
+      ctx.fill();
+    }
+
+    function laco(agora) {
+      quadro = 0;
+      if (!visivel || document.hidden) return;
+      desenhar(agora);
+      quadro = requestAnimationFrame(laco);
+    }
+
+    function ligar() {
+      if (!calmo && !quadro && visivel) quadro = requestAnimationFrame(laco);
+    }
+
+    function sintonizar() {
+      sintonizado = !sintonizado;
+      botao.textContent = sintonizado ? "Desligar o rádio" : "Sintonizar o pulsar";
+      if (sintonizado) guia.dizer("Pisca a cada 1,337 segundo. Mais pontual que muita reunião.", { chave: "pulsar" });
+      if (calmo) {
+        // Sem animação: mostra direto o registro inteiro
+        registro = registro.map(() => novaLinha(sintonizado));
+        desenhar(performance.now());
+      }
+    }
+
+    caixa.addEventListener("click", sintonizar);
 
     new IntersectionObserver(([e]) => {
       visivel = e.isIntersecting;

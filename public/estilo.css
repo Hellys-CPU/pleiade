@@ -30,6 +30,9 @@
   /* INNOVAR (provisório, até a identidade fechar) */
   --innovar: #d38cff;
 
+  /* Pulsar: o amarelo-limão do pulso */
+  --pulsar: #e4ff3a;
+
   --font-display: "Jost", "Futura", "Century Gothic", sans-serif;
   --font-text: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
 
@@ -204,6 +207,11 @@ button {
 .btn-estrela--innovar {
   --cor-estrela: #f3dcff;
   --brilho: 211, 140, 255;
+}
+
+.btn-estrela--pulsar {
+  --cor-estrela: #f6ffc4;
+  --brilho: 228, 255, 58;
 }
 
 .btn-estrela--apagada {
@@ -1104,6 +1112,46 @@ h2 {
   color: #f1dcff;
 }
 
+/* Pulsar: o farol que pisca a cada 1,337 s */
+.fenomeno--pulsar::before {
+  background: radial-gradient(ellipse 38% 50% at 34% 48%, rgba(228, 255, 58, 0.08), transparent 70%);
+}
+
+.fenomeno--pulsar .catalogo {
+  color: var(--pulsar);
+}
+
+.fenomeno--pulsar .fenomeno-links a {
+  color: var(--pulsar);
+}
+
+.fenomeno--pulsar :focus-visible {
+  outline-color: var(--pulsar);
+}
+
+.pulsar {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+
+.pulsar-canvas {
+  width: 100%;
+  height: 100%;
+  /* Os feixes se apagam antes da borda, como os restos da supernova */
+  -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+}
+
+.pulsar-botao {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: #f6ffc4;
+}
+
 /* As próximas: nebulosa, região não mapeada */
 .fenomeno--nebulosa::before {
   background: radial-gradient(ellipse 38% 50% at 34% 50%, rgba(37, 99, 201, 0.14), transparent 70%);
@@ -1345,6 +1393,11 @@ h2 {
   box-shadow: 0 0 12px 2px rgba(211, 140, 255, 0.45);
 }
 
+.lugar--pulsar span {
+  background: radial-gradient(circle at 34% 28%, #fbffe0, #e4ff3a 55%, #9bb318);
+  box-shadow: 0 0 12px 2px rgba(228, 255, 58, 0.45);
+}
+
 .lugar--vago {
   border-style: dashed;
 }
@@ -1569,6 +1622,7 @@ h2 {
 
 .rota--hellys { --cor: var(--atena); }
 .rota--innovar { --cor: var(--innovar); }
+.rota--pulsar { --cor: var(--pulsar); }
 .rota--pleiade { --cor: var(--estelar); }
 
 .rota .rota-num {

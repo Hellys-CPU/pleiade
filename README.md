@@ -1,6 +1,6 @@
 # Plêiade · site
 
-Site do grupo Plêiade, que reúne as marcas **hellys.** e **INNOVAR**. É uma carta celeste interativa: o visitante acende as sete estrelas do símbolo, conhece cada marca como um fenômeno diferente do mesmo céu e escolhe uma rota de contato.
+Site do grupo Plêiade, que reúne as marcas **hellys.**, **INNOVAR** e **Pulsar**. É uma carta celeste interativa: o visitante acende as sete estrelas do símbolo, conhece cada marca como um fenômeno diferente do mesmo céu e escolhe uma rota de contato.
 
 No ar em **https://hellys-cpu.github.io/pleiade/**
 
@@ -12,7 +12,8 @@ No ar em **https://hellys-cpu.github.io/pleiade/**
   - Atena, a engenheira de bordo, solda as peças;
   - Aurora, a comunicação de bordo, troca dados com a antena.
 - **INNOVAR · supernova:** a explosão que espalha os elementos de que nascem novas estrelas.
-- **As próximas · região não mapeada:** cinco lugares vagos na távola.
+- **Pulsar · pulsar:** o farol que pisca a cada 1,337 s. Ao sintonizar, cada passagem do feixe vira uma linha no registro de rádio.
+- **As próximas · região não mapeada:** quatro lugares vagos na távola.
 - **A távola, Ligue os pontos e Escolha uma rota.**
 - **Aurora, a guia,** que conversa com quem visita.
 
@@ -24,7 +25,7 @@ Sem bibliotecas: HTML, CSS e JavaScript puros. O site funciona no celular e resp
 | --- | --- |
 | `public/index.html` | A página |
 | `public/estilo.css` | Estilos, com os tokens do design system da Plêiade |
-| `public/site.js` | Céu, satélite, supernova, távola, jogo e guia |
+| `public/site.js` | Céu, satélite, supernova, pulsar, távola, jogo e guia |
 | `public/marca/` | Logos da Plêiade e da hellys. |
 | `public/og.jpg` | Imagem de prévia do link (1200 × 630) |
 | `og/og.html` | Fonte da imagem de prévia |
